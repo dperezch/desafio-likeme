@@ -10,10 +10,10 @@ const config = {
 
 const pool = new Pool(config);
 
-const ingresarPost = async(payload)=>{
+const ingresarPost = async({usuario,url,descripcion,likes})=>{
     try {
         const text = 'INSERT INTO posts(usuario,url,descripcion,likes) VALUES($1,$2,$3,$4) RETURNING *';
-        const values = [payload.usuario,payload.url,payload.descripcion,payload.likes];
+        const values = [usuario,url,descripcion,likes];
         const queryObject = {
             text,
             values
@@ -25,6 +25,16 @@ const ingresarPost = async(payload)=>{
         console.error(`Error: ${code}`);
     }
 }
+
+const obtenerPosts = async()=>{
+    try {
+        const text = 'SELECT * FROM posts';
+        const result = await pool.query(text);
+        return result;
+    } catch ({code}) {
+        console.error(`Error: ${code}`);
+    }
+};
 
 const sumarLikes = async(id)=>{
     try {
@@ -40,16 +50,5 @@ const sumarLikes = async(id)=>{
         console.error(`Error: ${code}`);
     }
 };
-
-const obtenerPosts = async()=>{
-    try {
-        const text = 'SELECT * FROM posts';
-        const result = await pool.query(text);
-        return result;
-    } catch ({code}) {
-        console.error(`Error: ${code}`);
-    }
-};
-
 
 module.exports = {ingresarPost, obtenerPosts, sumarLikes};

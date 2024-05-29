@@ -29,6 +29,16 @@ app.post('/post', async (req, res) => {
     }
 });
 
+app.get('/posts', async (req, res) => {
+    try {
+        const result = await obtenerPosts();
+        res.json(result.rows);
+    } catch (error) {
+        res.statusCode = 500;
+        res.json({error:'Algo salió mal, inténtalo más tarde'})
+    }
+});
+
 app.put('/post', async (req, res) => {
     const {id} = req.query;
     try {
@@ -40,12 +50,3 @@ app.put('/post', async (req, res) => {
     }
 });
 
-app.get('/posts', async (req, res) => {
-    try {
-        const result = await obtenerPosts();
-        res.json(result.rows);
-    } catch (error) {
-        res.statusCode = 500;
-        res.json({error:'Algo salió mal, inténtalo más tarde'})
-    }
-});
